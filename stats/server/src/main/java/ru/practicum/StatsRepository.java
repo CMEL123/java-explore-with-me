@@ -35,4 +35,5 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
             @Param("uris") List<String> uris
     );
 
+
 }
