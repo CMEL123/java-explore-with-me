@@ -13,7 +13,11 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <name>Stats</name>
+
     <modules>
+        <module>stats-client</module>
+        <module>server</module>
         <module>dto</module>
     </modules>
 
