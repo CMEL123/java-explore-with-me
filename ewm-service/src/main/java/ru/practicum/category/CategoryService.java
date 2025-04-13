@@ -38,7 +38,7 @@ public class CategoryService {
     @Transactional
     public CategoryDto update(NewCategoryDto categoryDto, Long id) {
         Category oldCategory = findById(id);
-        if (!oldCategory.getName().equals(categoryDto.getName())){
+        if (!oldCategory.getName().equals(categoryDto.getName())) {
             checkName(categoryDto.getName());
         }
         Category category = CategoryMapper.toCategory(categoryDto, id);
