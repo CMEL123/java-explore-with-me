@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.request.dto.ParticipationRequestDto;
+import ru.practicum.request.ParticipationRequestDto;
 
 import java.util.List;
 
