@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EndpointHitDto {
-    Long id;
 
     @NotBlank(message = "Имя должно быть указано")
     String app;
