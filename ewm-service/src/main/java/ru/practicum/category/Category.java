@@ -1,7 +1,6 @@
 package ru.practicum.category;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Entity

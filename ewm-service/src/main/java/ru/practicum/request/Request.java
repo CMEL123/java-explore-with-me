@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.event.model.Event;
-import ru.practicum.request.RequestStatus;
 import ru.practicum.user.User;
 
 import java.time.LocalDateTime;

@@ -9,7 +9,6 @@ import ru.practicum.event.EventRepository;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.exception.ValidationException;
-import ru.practicum.request.dto.ParticipationRequestDto;
 import ru.practicum.user.User;
 import ru.practicum.user.UserService;
 

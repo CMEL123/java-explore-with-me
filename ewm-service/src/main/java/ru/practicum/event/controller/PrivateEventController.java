@@ -1,6 +1,5 @@
 package ru.practicum.event.controller;
 
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,7 @@ import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.NewEventDto;
 import ru.practicum.event.dto.UpdateEventUserRequest;
 import ru.practicum.event.EventService;
-import ru.practicum.request.dto.ParticipationRequestDto;
+import ru.practicum.request.ParticipationRequestDto;
 
 import java.util.List;
 
