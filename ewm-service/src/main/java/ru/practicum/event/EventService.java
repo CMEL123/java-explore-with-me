@@ -21,7 +21,7 @@ import ru.practicum.exception.ValidationException;
 import ru.practicum.location.Location;
 import ru.practicum.location.LocationMapper;
 import ru.practicum.location.LocationRepository;
-import ru.practicum.request.dto.ParticipationRequestDto;
+import ru.practicum.request.ParticipationRequestDto;
 import ru.practicum.request.RequestMapper;
 import ru.practicum.request.Request;
 import ru.practicum.request.RequestStatus;
