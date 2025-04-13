@@ -21,7 +21,7 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    public List<UserDto> findAll( List<Integer> ids, int from, int size) {
+    public List<UserDto> findAll(List<Integer> ids, int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
         List<User> users;
 

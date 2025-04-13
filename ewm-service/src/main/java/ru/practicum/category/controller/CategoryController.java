@@ -19,7 +19,7 @@ public class CategoryController {
     public List<CategoryDto> findAll(
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "10") int size) {
-        return categoryService.findAll( from, size);
+        return categoryService.findAll(from, size);
     }
 
     @GetMapping("/{catId}")
