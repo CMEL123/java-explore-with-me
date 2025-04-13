@@ -60,6 +60,7 @@ public class UserService {
             log.info("Пользователь c id = {} найден", id);
             return user.get();
         }
+
         log.warn("Пользователь с id = {} не найден", id);
         throw new NotFoundException(String.format("User with id=%d was not found", id));
     }
