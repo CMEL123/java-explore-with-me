@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.exception.ValidationException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +25,9 @@ public class StatsService {
 
     public List<StatsDto> findStats(LocalDateTime start, LocalDateTime end,
                                                List<String> uris, String unique) {
+        if (start.isAfter(end)) {
+            throw new ValidationException("Дата начала не может быть позже даты окончания");
+        }
 
         if (unique.equals("true")) {
             return statsRepository.findStatUnique(start, end, uris);
