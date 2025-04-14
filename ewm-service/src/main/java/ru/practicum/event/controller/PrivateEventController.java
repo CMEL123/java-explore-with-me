@@ -25,8 +25,11 @@ public class PrivateEventController {
     private final EventService eventService;
 
     @GetMapping
-    public List<EventShortDto> findEventsPrivate(@PathVariable Long userId, @RequestParam(defaultValue = "0") Integer from,
-                                                 @RequestParam(defaultValue = "10") Integer size) {
+    public List<EventShortDto> findEventsPrivate(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") Integer from,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
         return eventService.findEventsPrivate(userId, from, size);
     }
 
@@ -41,7 +44,10 @@ public class PrivateEventController {
     }
 
     @GetMapping("/{eventId}")
-    public EventFullDto findEventByUserPrivate(@PathVariable Long userId, @PathVariable Long eventId) {
+    public EventFullDto findEventByUserPrivate(
+            @PathVariable Long userId,
+            @PathVariable Long eventId
+    ) {
         return eventService.findEventByUserPrivate(userId, eventId);
     }
 
@@ -49,13 +55,16 @@ public class PrivateEventController {
     public EventFullDto updateEventPrivate(
             @PathVariable Long userId,
             @PathVariable Long eventId,
-            @RequestBody UpdateEventUserRequest dto
+            @Valid @RequestBody UpdateEventUserRequest dto
     ) {
         return eventService.updateEventPrivate(userId, eventId, dto);
     }
 
     @GetMapping("/{eventId}/requests")
-    public List<ParticipationRequestDto> findEventRequestsPrivate(@PathVariable Long userId, @PathVariable Long eventId) {
+    public List<ParticipationRequestDto> findEventRequestsPrivate(
+            @PathVariable Long userId,
+            @PathVariable Long eventId
+    ) {
         return eventService.findEventRequestsPrivate(userId, eventId);
     }
 

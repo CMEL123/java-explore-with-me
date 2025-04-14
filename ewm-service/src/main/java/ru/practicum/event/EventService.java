@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.practicum.EndpointHitDto;
 import ru.practicum.StatsClient;
+import ru.practicum.StatsDto;
 import ru.practicum.category.Category;
 import ru.practicum.category.CategoryRepository;
 import ru.practicum.event.dto.*;
@@ -189,6 +190,19 @@ public class EventService {
         hitDto.setUri(httpServletRequest.getRequestURI());
         hitDto.setIp(httpServletRequest.getRemoteAddr());
         hitDto.setTimestamp(LocalDateTime.now());
+        statsClient.hit(hitDto);
+
+        List<StatsDto> stats = statsClient.findStats(event.getPublishedOn(),
+                LocalDateTime.now(), List.of("/events/" + eventId), true).getBody();
+
+        Long views = 0L;
+        if (stats != null) {
+            log.info("Метод findEventByIdPublic, длина списка stats: {}", stats.size());
+            views = stats.getFirst().getHits();
+        }
+        event.setViews(views);
+
+        log.info("Метод findEventByIdPublic, количество сохраняемых просмотров: {}", views);
 
         return eventMapper.toFullDto(event);
     }
