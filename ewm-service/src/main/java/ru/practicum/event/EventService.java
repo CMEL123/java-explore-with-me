@@ -32,10 +32,8 @@ import ru.practicum.user.UserRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -122,15 +120,11 @@ public class EventService {
             }
         }
 
-        EndpointHitDto hitRequest = new EndpointHitDto();
-        hitRequest.setApp("ewn-server");
-        hitRequest.setUri(httpServletRequest.getRequestURI());
-        hitRequest.setIp(httpServletRequest.getRemoteAddr());
-        hitRequest.setTimestamp(LocalDateTime.now());
-        statsClient.hit(hitRequest);
+        hit(httpServletRequest);
 
         Pageable pageable = PageRequest.of(from / size, size, sorting);
         List<Event> events = eventRepository.findAll(spec, pageable).getContent();
+        views(events);
 
         return eventMapper.toShortDto(events);
 
@@ -185,24 +179,10 @@ public class EventService {
             throw new NotFoundException("Событие " + eventId + " не найдено");
         }
 
-        EndpointHitDto hitDto = new EndpointHitDto();
-        hitDto.setApp("ewn-server");
-        hitDto.setUri(httpServletRequest.getRequestURI());
-        hitDto.setIp(httpServletRequest.getRemoteAddr());
-        hitDto.setTimestamp(LocalDateTime.now());
-        statsClient.hit(hitDto);
+        hit(httpServletRequest);
+        views(List.of(event));
 
-        List<StatsDto> stats = statsClient.findStats(event.getPublishedOn(),
-                LocalDateTime.now(), List.of("/events/" + eventId), true).getBody();
-
-        Long views = 0L;
-        if (stats != null) {
-            log.info("Метод findEventByIdPublic, длина списка stats: {}", stats.size());
-            views = stats.getFirst().getHits();
-        }
-        event.setViews(views);
-
-        log.info("Метод findEventByIdPublic, количество сохраняемых просмотров: {}", views);
+        log.info("Метод findEventByIdPublic, количество сохраняемых просмотров: {}", event.getViews());
 
         return eventMapper.toFullDto(event);
     }
@@ -474,5 +454,35 @@ public class EventService {
         }
 
         return eventMapper.toFullDto(eventRepository.save(event));
+    }
+
+
+    private void hit(HttpServletRequest httpServletRequest) {
+        EndpointHitDto hitDto = new EndpointHitDto();
+        hitDto.setApp("ewn-server");
+        hitDto.setUri(httpServletRequest.getRequestURI());
+        hitDto.setIp(httpServletRequest.getRemoteAddr());
+        hitDto.setTimestamp(LocalDateTime.now());
+        statsClient.hit(hitDto);
+    }
+
+    private void views(List<Event> events) {
+
+        Map<String, List<StatsDto>> stats = Objects.requireNonNull(statsClient.findStats(
+                LocalDateTime.of(1970, 1, 1, 0, 0),
+                LocalDateTime.now(),
+                events.stream().map(el -> "/events/" + el.getId()).toList(),
+                true
+        ).getBody()).stream().collect(Collectors.groupingBy(StatsDto::getUri));
+
+        events.forEach(
+                el -> {
+                    long val = 0L;
+                    if (stats.get("/events/" + el.getId()) != null) {
+                        val = stats.get("/events/" + el.getId()).getFirst().getHits();
+                    }
+                    el.setViews(val);
+                }
+        );
     }
 }

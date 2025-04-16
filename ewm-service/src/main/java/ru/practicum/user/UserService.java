@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.exception.DuplicatedDataException;
 import ru.practicum.exception.NotFoundException;
-import ru.practicum.exception.ValidationException;
 import ru.practicum.user.dto.UserDto;
 
 import java.util.List;
@@ -40,9 +39,6 @@ public class UserService {
     @Transactional
     public UserDto create(UserDto userDto) {
         log.info("Добавление пользователя");
-        if (userDto.getName().isBlank()) {
-            throw new ValidationException("Field: name. Error: must not be blank. Value: null");
-        }
 
         User user = userMapper.toUser(userDto);
         checkEmail(user);

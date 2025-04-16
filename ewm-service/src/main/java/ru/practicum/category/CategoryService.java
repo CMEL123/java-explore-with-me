@@ -11,7 +11,6 @@ import ru.practicum.event.EventRepository;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.DuplicatedDataException;
 import ru.practicum.exception.NotFoundException;
-import ru.practicum.exception.ValidationException;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
