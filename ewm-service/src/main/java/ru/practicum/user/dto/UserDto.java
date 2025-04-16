@@ -17,11 +17,11 @@ import lombok.experimental.FieldDefaults;
 public class UserDto {
     Long id;
 
-    @NotBlank
+    @NotBlank(message = "Field: name. Error: must not be blank. Value: null")
     @Size(min = 2, max = 250)
     String name;
 
-    @NotBlank
+    @NotBlank(message = "Field: email. Error: must not be blank. Value: null")
     @Size(min = 6, max = 254)
     @Email(message = "не валидный email")
     String email;

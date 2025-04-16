@@ -20,6 +20,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     public List<UserDto> findAll(List<Integer> ids, int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
@@ -32,7 +33,7 @@ public class UserService {
         }
         log.info("Получено {} пользователей", users.size());
         return users.stream()
-                .map(UserMapper::toUserDto)
+                .map(userMapper::toUserDto)
                 .toList();
     }
 
@@ -43,9 +44,9 @@ public class UserService {
             throw new ValidationException("Field: name. Error: must not be blank. Value: null");
         }
 
-        User user = UserMapper.toUser(userDto);
+        User user = userMapper.toUser(userDto);
         checkEmail(user);
-        return UserMapper.toUserDto(userRepository.save(user));
+        return userMapper.toUserDto(userRepository.save(user));
     }
 
     @Transactional
@@ -66,11 +67,6 @@ public class UserService {
     }
 
     private void checkEmail(User currUser) {
-
-        if (currUser.getEmail().isBlank()) {
-            throw new ValidationException("email не может быть пустым");
-        }
-
         if (userRepository.findByEmail(currUser.getEmail()).isPresent()) {
             throw new DuplicatedDataException("Этот email уже используется");
         }

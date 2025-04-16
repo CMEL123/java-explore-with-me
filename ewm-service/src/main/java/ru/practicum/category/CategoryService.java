@@ -26,13 +26,14 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final EventRepository eventRepository;
+    private final CategoryMapper categoryMapper;
 
     @Transactional
     public CategoryDto create(NewCategoryDto categoryDto) {
         checkName(categoryDto.getName());
 
-        Category category = CategoryMapper.toCategory(categoryDto);
-        return CategoryMapper.toCategoryDto(categoryRepository.save(category));
+        Category category = categoryMapper.toCategory(categoryDto);
+        return categoryMapper.toCategoryDto(categoryRepository.save(category));
     }
 
     @Transactional
@@ -41,8 +42,8 @@ public class CategoryService {
         if (!oldCategory.getName().equals(categoryDto.getName())) {
             checkName(categoryDto.getName());
         }
-        Category category = CategoryMapper.toCategory(categoryDto, id);
-        return CategoryMapper.toCategoryDto(categoryRepository.save(category));
+        Category category = categoryMapper.toCategory(categoryDto, id);
+        return categoryMapper.toCategoryDto(categoryRepository.save(category));
     }
 
     @Transactional
@@ -71,20 +72,15 @@ public class CategoryService {
         log.info("Получено {} категорий", categories.size());
 
         return categories.stream()
-                .map(CategoryMapper::toCategoryDto)
+                .map(categoryMapper::toCategoryDto)
                 .toList();
     }
 
     public CategoryDto findByCatId(long catId) {
-        return CategoryMapper.toCategoryDto(findById(catId));
+        return categoryMapper.toCategoryDto(findById(catId));
     }
 
     private void checkName(String currName) {
-
-        if (currName.isBlank()) {
-            throw new ValidationException("Field: name. Error: must not be blank. Value: null");
-        }
-
         if (categoryRepository.findByName(currName).isPresent()) {
             throw new DuplicatedDataException("Field: name. Error: The name is not unique");
         }
