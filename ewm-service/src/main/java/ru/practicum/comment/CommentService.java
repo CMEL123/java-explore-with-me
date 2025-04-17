@@ -55,8 +55,6 @@ public class CommentService {
 
 
     public CommentDto createComment(@Valid CommentCreateDto commentDto, Long userId, Long eventId) {
-        log.info("Попытка создать коммит" + " userId:" + userId + " eventId: " + eventId + " commentDto: " + commentDto.getText() );
-
         return commentMapper.toCommentDto(
                 commentRepository.save(
                         commentMapper.toComment(
