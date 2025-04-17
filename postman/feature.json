@@ -600,7 +600,7 @@
 									"    try {\r",
 									"        const user1 = await api.addUser(rnd.getUser());\r",
 									"        const user2 = await api.addUser(rnd.getUser());\r",
-									"        pm.collectionVariables.set(\"uid\", user2.id);\r",
+									"        pm.collectionVariables.set(\"userid\", user2.id);\r",
 									"\r",
 									"        const category = await api.addCategory(rnd.getCategory());\r",
 									"        const event = await api.addEvent(user1.id, rnd.getEvent(category.id));\r",
@@ -634,7 +634,7 @@
 							"script": {
 								"exec": [
 									"pm.test(\"Запрос по изменению чужого комментария должен вернуть ошибку\", function () {\r",
-									"    pm.response.to.have.status(409);\r",
+									"    pm.response.to.have.status(400);\r",
 									"\r",
 									"    const response = pm.response.json();\r",
 									"    console.log(\"Ответ сервера:\", response);\r",
@@ -644,8 +644,8 @@
 									"    pm.expect(response).to.have.property('message');\r",
 									"    pm.expect(response).to.have.property('timestamp');\r",
 									"\r",
-									"    pm.expect(response.status).to.equal('FORBIDDEN', 'Статус должен быть FORBIDDEN');\r",
-									"    pm.expect(response.reason).to.equal('For the requested operation the conditions are not met.', 'Причина должна быть \"For the requested operation the conditions are not met.\"');\r",
+									"    pm.expect(response.status).to.equal('BAD_REQUEST', 'Статус должен быть BAD_REQUEST');\r",
+									"    pm.expect(response.reason).to.equal('Incorrectly made request.', 'Причина должна быть \"Incorrectly made request.\"');\r",
 									"    pm.expect(response.message).to.include('is not author of comment', 'Сообщение об ошибке должно указывать на нарушение ограничения на редактирования комментария владельцем');\r",
 									"});"
 								],
@@ -683,20 +683,20 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/events/:eventId/comments/:commentId",
+							"raw": "{{baseUrl}}/users/:userId/comments/:commentId",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"events",
-								":eventId",
+								"users",
+								":userId",
 								"comments",
 								":commentId"
 							],
 							"variable": [
 								{
-									"key": "eventId",
-									"value": "{{eventId}}"
+									"key": "userId",
+									"value": "{{userId}}"
 								},
 								{
 									"key": "commentId",
