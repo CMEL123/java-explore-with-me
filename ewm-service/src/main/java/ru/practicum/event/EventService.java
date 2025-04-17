@@ -172,8 +172,7 @@ public class EventService {
     }
 
     public EventFullDto findEventByIdPublic(Long eventId, HttpServletRequest httpServletRequest) {
-        Event event = eventRepository.findById(eventId).orElseThrow(() ->
-                new NotFoundException("Событие " + eventId + " не найдено"));
+        Event event = findById(eventId);
 
         if (event.getState() != State.PUBLISHED) {
             throw new NotFoundException("Событие " + eventId + " не найдено");
@@ -228,8 +227,7 @@ public class EventService {
             throw new NotFoundException("Пользователь " + userId + " не существует");
         }
 
-        Event event = eventRepository.findById(eventId).orElseThrow(() ->
-                new NotFoundException("Событие с id = " + eventId + " не найдено."));
+        Event event = findById(eventId);
 
         if (!Objects.equals(event.getInitiator().getId(), userId)) {
             throw new ValidationException("Пользователь " + userId + " не является создателем события " + eventId);
@@ -309,8 +307,7 @@ public class EventService {
             throw new NotFoundException("Пользователь " + userId + " не существует");
         }
 
-        Event event = eventRepository.findById(eventId).orElseThrow(() ->
-                new NotFoundException("Событие с id = " + eventId + " не найдено."));
+        Event event = findById(eventId);
 
         if (!Objects.equals(event.getInitiator().getId(), userId)) {
             throw new ValidationException("Пользователь " + userId + " не является создателем события " + eventId);
@@ -331,8 +328,7 @@ public class EventService {
             throw new NotFoundException("Пользователь " + userId + " не существует");
         }
 
-        Event event = eventRepository.findById(eventId).orElseThrow(() ->
-                new NotFoundException("Событие с id = " + eventId + " не найдено."));
+        Event event = findById(eventId);
 
         if (!Objects.equals(event.getInitiator().getId(), userId)) {
             throw new ValidationException("Пользователь " + userId + " не является создателем события " + eventId);
@@ -385,8 +381,7 @@ public class EventService {
 
     public EventFullDto updateEventAdmin(Long eventId, UpdateEventAdminRequest dto) {
         log.info("Admin: Обновление события");
-        Event event = eventRepository.findById(eventId).orElseThrow(() ->
-                new NotFoundException("Событие с id = " + eventId + " не найдено."));
+        Event event = findById(eventId);
 
         if (dto.getAnnotation() != null && !dto.getAnnotation().isBlank()) {
             event.setAnnotation(dto.getAnnotation());
@@ -456,6 +451,16 @@ public class EventService {
         return eventMapper.toFullDto(eventRepository.save(event));
     }
 
+    public Event findById(Long id) {
+        Optional<Event> event =  eventRepository.findById(id);
+        if  (event.isPresent()) {
+            log.info("Событие c id = {} найден", id);
+            return event.get();
+        }
+
+        log.warn("Событие с id = {} не найдено.", id);
+        throw new NotFoundException(String.format("Event with id=%d was not found", id));
+    }
 
     private void hit(HttpServletRequest httpServletRequest) {
         EndpointHitDto hitDto = new EndpointHitDto();

@@ -7,9 +7,13 @@ Template repository for ExploreWithMe project.
 - Возможность получения комментариев для определенного события (/events/{eventId}/comments)
 2) Для Private
 - Получить все свои комментарии (/users/#{userId}/comments)
-- Возможность добавить комментарий (/users/#{userId}/events/{eventId}/comments/)
-- Возможность редактировать сущ. комментарий (/users/#{userId}/events/{eventId}/comments/#{commentId})
+- Возможность добавить комментарий к событию (/users/#{userId}/events/{eventId}/comments/)
+- Возможность редактировать сущ. комментарий (/users/#{userId}/comments/#{commentId})
 - Удалить комментарий (/users/#{userId}/comments/#{commentId})
 3) Для Admin
 - Получить любой комментарий (admin/comments/#{commentId})
 - Удалить любой комментарий (admin/comments/#{commentId})
+
+
+Ссылка на Pull requests
+https://github.com/CMEL123/java-explore-with-me/pull/3

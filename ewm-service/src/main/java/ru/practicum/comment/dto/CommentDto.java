@@ -16,8 +16,12 @@ import java.time.LocalDateTime;
 public class CommentDto {
     Long id;
     String text;
-    Long event;
-    Long author;
+    Long eventId;
+    String eventTitle;
+    String eventDescription;
+    Long authorId;
+    String authorName;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime timestamp;
+    LocalDateTime created;
+    LocalDateTime updated;
 }
