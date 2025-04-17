@@ -16,4 +16,4 @@ Template repository for ExploreWithMe project.
 
 
 Ссылка на Pull requests
-https://github.com/CMEL123/java-explore-with-me/pull/3
+https://github.com/CMEL123/java-explore-with-me/pull/4
