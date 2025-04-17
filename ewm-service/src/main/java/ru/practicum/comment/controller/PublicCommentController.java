@@ -25,4 +25,12 @@ public class PublicCommentController {
         return commentService.getCommentsByEventId(eventId, from, size);
     }
 
+    @GetMapping("/{commentId}")
+    public CommentDto getCommentById(
+            @PathVariable Long eventId,
+            @PathVariable Long commentId
+    ) {
+        return commentService.getCommentById(eventId, commentId);
+    }
+
 }

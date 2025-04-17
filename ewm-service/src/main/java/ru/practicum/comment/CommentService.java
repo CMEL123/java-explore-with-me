@@ -45,7 +45,7 @@ public class CommentService {
         userService.findById(userId);
 
         Pageable pageRequest = PageRequest.of(from / size, size);
-        Page<Comment> commentPage = commentRepository.findByEventId(userId, pageRequest);
+        Page<Comment> commentPage = commentRepository.findByAuthorId(userId, pageRequest);
 
         return commentPage.getContent()
                         .stream()
@@ -77,20 +77,38 @@ public class CommentService {
         );
     }
 
+    public CommentDto updateCommentByAdmin(@Valid CommentCreateDto commentDto, Long commentId) {
+        Comment commentOld = findById(commentId);
+        commentOld.setText(commentDto.getText());
+        commentOld.setUpdated(LocalDateTime.now());
+        return commentMapper.toCommentDto(
+                commentRepository.save(commentOld)
+        );
+    }
+
     public void deleteComment(Long commentId, Long userId) {
         Comment comment = findById(commentId);
         checkUserIsAuthor(comment, userId);
         commentRepository.delete(comment);
     }
 
-    public CommentDto getCommentById(Long commentId) {
-        return commentMapper.toCommentDto(findById(commentId));
-    }
-
     public void deleteCommentByAdmin(Long commentId) {
         Comment comment = findById(commentId);
         commentRepository.delete(comment);
     }
+
+    public CommentDto getCommentById(Long eventId, Long commentId) {
+        eventService.findById(eventId);
+        Comment comment = findById(commentId);
+        checkCommitIsEvent(comment, eventId);
+        return commentMapper.toCommentDto(comment);
+    }
+
+    public CommentDto getCommentByIdByAdmin(Long commentId) {
+        return commentMapper.toCommentDto(findById(commentId));
+    }
+
+
 
     private void checkUserIsAuthor(Comment comment, Long userId) {
         if (!comment.getAuthor().getId().equals(userId)) {
@@ -104,7 +122,19 @@ public class CommentService {
         }
     }
 
-    public Comment findById(Long id) {
+    private void checkCommitIsEvent(Comment comment, Long eventId) {
+        if (!comment.getEvent().getId().equals(eventId)) {
+            throw new ValidationException(
+                    String.format(
+                            "Comment with id=%d does not apply to the Event with id=%d",
+                            comment.getId(),
+                            eventId
+                    )
+            );
+        }
+    }
+
+    private Comment findById(Long id) {
         Optional<Comment> comment =  commentRepository.findById(id);
         if  (comment.isPresent()) {
             log.info("Комментарий c id = {} найден", id);
